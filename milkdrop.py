@@ -3,6 +3,7 @@ import numpy as np
 
 # 課題1-①：画像を読み込み．
 img = cv2.imread('./images/milkdrop.bmp')
+cv2.imshow('img', img)
 
 # 画像の左端をトリミング．
 h, w = img.shape[:2]
@@ -39,10 +40,10 @@ cv2.drawContours(mask, fixed_contours, -1, 255, cv2.FILLED)
 # トリミングした分を補正（アフィン変換で平行移動）．
 x_shift = 15
 shift_matrix = np.float32([[1, 0, x_shift], [0, 1, 0]])
-masked_img = cv2.warpAffine(mask, shift_matrix, mask.shape[:2])
+mask = cv2.warpAffine(mask, shift_matrix, mask.shape[:2])
 trimmed_img = cv2.warpAffine(trimmed_img, shift_matrix, mask.shape[:2])
 
 # 課題1-⑤：ミルククラウン領域のみを表示．
-result = cv2.bitwise_and(trimmed_img, trimmed_img, mask=masked_img)
-cv2.imshow('result', result)
+masked_img = cv2.bitwise_and(trimmed_img, trimmed_img, mask=mask)
+cv2.imshow('masked_img', masked_img)
 cv2.waitKey(0)
